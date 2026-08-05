@@ -4,7 +4,7 @@ Có 4 bước cơ bản:
  Lập trình viên        AI đo độ            AI soạn thảo          Sếp & Reviewer
  vừa sửa Code          "lệch pha"           kèm bằng chứng         duyệt để đăng
 # 1. Báo động khi có thay đổi (Code Event)
-- Cách hiểu: Mỗi khi Lập trình viên (Developer) sửa xong một đoạn code và đẩy lên GitHub, hệ thống sẽ rung chuông: “Alo AI ơi, code vừa thay đổi này!”.
+- Cách hiểu: Mỗi khi Lập trình viên (Developer) sửa xong một đoạn code và đẩy lên GitHub, hệ thống sẽ thông báo ngay lập tức: “Code vừa đổi rồi, AI kiểm tra ngay!”.
 # 2. Tự đo độ “lệch pha” (Documentation Drift)
 - Cách hiểu: AI sẽ nhảy vào xem đoạn code vừa sửa và so với cuốn sách hướng dẫn hiện tại.
 - Nếu nó thấy code đã đổi (ví dụ: đổi tên hàm, thêm tính năng) mà sách chưa đổi, nó sẽ tính ra một điểm lệch pha (Ví dụ: “Sách cũ mất 80% rồi!”).
