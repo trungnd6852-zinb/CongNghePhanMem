@@ -1,25 +1,19 @@
 from flask import Flask, jsonify
-# from api.routes import register_routes
 from api.swagger import spec
 from api.controllers.todo_controller import bp as todo_bp
 from api.controllers.auth_controller import auth_bp as auth_bp
 from api.middleware import middleware
-from api.responses import success_response
 from infrastructure.databases import init_db
-from config import Config
-from flasgger import Swagger
-from config import SwaggerConfig
 from flask_swagger_ui import get_swaggerui_blueprint
-
 
 def create_app():
     app = Flask(__name__)
-    Swagger(app)
-    # Đăng ký blueprint trước
+    
+    # Đăng ký blueprint
     app.register_blueprint(todo_bp)
     app.register_blueprint(auth_bp)
-    # register_routes(app)
-     # Thêm Swagger UI blueprint
+
+    # Thêm Swagger UI blueprint
     SWAGGER_URL = '/docs'
     API_URL = '/swagger.json'
     swaggerui_blueprint = get_swaggerui_blueprint(
@@ -37,21 +31,21 @@ def create_app():
     # Register middleware
     middleware(app)
 
-    # Register routes
-    with app.test_request_context():
+    # Đăng ký các path vào apispec (Cần thực hiện trong app_context)
+    with app.app_context():
         for rule in app.url_map.iter_rules():
-            # Thêm các endpoint khác nếu cần
+            # Kiểm tra endpoint để thêm vào apispec
             if rule.endpoint.startswith(('todo.', 'course.', 'user.', 'auth.')):
-                view_func = app.view_functions[rule.endpoint]
-                print(f"Adding path: {rule.rule} -> {view_func}")
-                spec.path(view=view_func)
+                view_func = app.view_functions.get(rule.endpoint)
+                if view_func:
+                    print(f"Adding path: {rule.rule} -> {view_func}")
+                    spec.path(view=view_func)
             
     @app.route("/swagger.json")
     def swagger_json():
         return jsonify(spec.to_dict())
 
     return app
-# Run the application
 
 if __name__ == '__main__':
     app = create_app()
